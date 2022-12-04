@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title> View Machine Stats </title>
+        <link rel="stylesheet" href="{{url_for('static',filename='stylesheet.css')}}" />
+    </head>
+    <body>
+
+        <div id="page-content">
+
+            <h1> Machine Stats </h1>
+
+            <svg id="graph" width="{{ graph.width }}" height="{{ graph.height }}">
+
+            {% for line in graph.lines %}
+
+                <line
+                    x1="{{ line.x1 }}"
+                    y1="{{ line.y1 }}"
+                    x2="{{ line.x2 }}"
+                    y2="{{ line.y2 }}"
+                    style="stroke:rgb(255,0,0);stroke-width:2"
+                />
+
+            {% endfor %}
+
+            </svg>
+
+            <table>
+                <tr>
+                    <td>CPU percentage</td>
+                    <td>{{ cpu_percent }} %</td>
+                </tr>
+                <tr>
+                    <td>Memory used ({{ mem_unit }})</td>
+                    <td>{{ mem_used }}</td>
+                </tr>
+                <tr>
+                    <td>Memory total ({{ mem_unit }})</td>
+                    <td>{{ mem_total }}</td>
+                </tr>
+                <tr>
+                    <td>Memory free ({{ mem_unit }})</td>
+                    <td>{{ mem_free }}</td>
+                </tr>
+            </table>
+
+        </div>
+        
+    </body>
+</html>
