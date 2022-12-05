@@ -4,11 +4,17 @@ import time
 from .wsgi import runFlask
 from .stats_tracker import Stats
 
+rrd_tasks = []
 
 def initParser(parser):
     subparsers = parser.add_subparsers()
     subparsers.required = True
     subparsers.dest = "command"
+
+    parser.add_argument(
+        "path",
+        help="path to the Round-Robin Database file (.rrd)"
+    )
 
     record_parser = subparsers.add_parser(
         "record",
@@ -26,7 +32,7 @@ def initParser(parser):
     )
 
 
-def record():
+def record(path):
     stats = Stats()
 
     recording = True
@@ -36,23 +42,27 @@ def record():
         print(rrd_string)
 
         rrdtool.update(
-            "statsviewer.rrd",
+            path,
             rrd_string
         )
         time.sleep(1)
 
 
 
-def serve():
-    runFlask()      
+def serve(path):
+    runFlask(path)      
 
 
-def init():
+def init(path):
     rrdtool.create(
-        "statsviewer.rrd",
+        path,
         "--step", "1",
         "DS:cpu_usage:GAUGE:30:0:100",
         "DS:mem_usage:GAUGE:30:0:100",
+        "DS:cpu_temp:GAUGE:30:0:200",
+        "DS:sodimm_temp:GAUGE:30:0:200",
+        "DS:gpu_temp:GAUGE:30:0:200",
+        "DS:ambient_temp:GAUGE:30:0:200",
         "RRA:AVERAGE:0.5:1:864000",
         "RRA:AVERAGE:0.5:60:129600",
         "RRA:AVERAGE:0.5:3600:13392",
@@ -69,13 +79,13 @@ def main():
     args = parser.parse_args()
 
     if args.command == "record":
-        record()
+        record(args.path)
     
     elif args.command == "serve":
-        serve()
+        serve(args.path)
 
     elif args.command == "init":
-        init()
+        init(args.path)
 
 
 if __name__ == "__main__":

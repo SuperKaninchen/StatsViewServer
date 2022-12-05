@@ -11,51 +11,59 @@
 
             <h1> Machine Stats </h1>
 
-            <form action="{{ url_for('viewStats') }}" method="POST">
-                <select name="timeframe">
-                
-                    <option value="60">60 Seconds</option>
-                    <option value="600">10 Minutes</option>
-                    <option value="3600">1 Hour</option>
-                    <option value="86400">1 Day</option>
-                
-                </select>
-                
-                <input type="submit" value="Update timeframe">
-            </form>
+            <div id="view-settings">
+                <form action="{{ url_for('viewStats') }}" method="POST">
+                    <select name="timeframe">                
+                        <option value="60">60 Seconds</option>
+                        <option value="600">10 Minutes</option>
+                        <option value="3600">1 Hour</option>
+                        <option value="86400">1 Day</option>                
+                    </select>
+                    <select name="viewselect">
+                        <option value="cpu_mem">CPU and Memory</option>
+                        <option value="temps">Temperatures</option>               
+                    </select>
+                    
+                    <input type="submit" value="Update view">
+                </form>           
+            </div>
 
-            {% for graph in graphs %}
+            <div id="graphs">
 
-            <svg class="graph" width="{{ graph.width }}" height="{{ graph.height }}">
+                {% for graph in graphs %}
 
-            {% for line in graph.lines %}
+                <svg class="graph" width="{{ graph.width }}" height="{{ graph.height }}">
 
-                {% if line.y2 %} 
+                {% for line in graph.lines %}
 
-                    <line
-                        x1="{{ line.x1 }}"
-                        y1="{{ line.y1 }}"
-                        x2="{{ line.x2 }}"
-                        y2="{{ line.y2 }}"
-                        style="stroke:green;stroke-width:2"
-                    />
+                    {% if line.y2 %} 
 
-                {% else %}
+                        <line
+                            x1="{{ line.x1 }}"
+                            y1="{{ line.y1 }}"
+                            x2="{{ line.x2 }}"
+                            y2="{{ line.y2 }}"
+                            style="stroke:green;stroke-width:2"
+                        />
 
-                    <rect
-                        x="{{ line.x1 }}"
-                        width="10"
-                        height="{{ graph.height }}"
-                        style="fill:red;stroke:black;stroke-width:2;"
-                    />
+                    {% else %}
 
-                {% endif %}
+                        <rect
+                            x="{{ line.x1 }}"
+                            width="{{ graph.segment_width }}"
+                            height="{{ graph.height }}"
+                            style="fill:red;stroke:red;stroke-weight:1"
+                        />
 
-            {% endfor %}
+                    {% endif %}
 
-            </svg>
+                {% endfor %}
 
-            {% endfor %}
+                </svg>
+
+                {% endfor %}
+
+            </div
 
             <table>
                 <tr>

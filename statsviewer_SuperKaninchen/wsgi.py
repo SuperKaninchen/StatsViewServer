@@ -6,6 +6,8 @@ import rrdtool
 stats = Stats()
 app = Flask(__name__)
 timeframe = 60
+viewselect = "cpu_mem"
+rrd_path = ""
 
 
 def makeStatsDict(stats):
@@ -20,9 +22,10 @@ def makeStatsDict(stats):
 
 @app.route("/viewStats", methods=["GET", "POST"])
 def viewStats():
-    global timeframe
+    global timeframe, viewselect
     if request.method == "POST":
         timeframe = int(request.form.get("timeframe"))
+        viewselect = request.form.get("viewselect")
 
     graphs = fetchGraphsFromRRD(timeframe)
     stats.update()
@@ -46,26 +49,50 @@ def fetchGraphsFromRRD(timeframe):
     result = rrdtool.fetch(
         "--start", "-"+str(timeframe),
         "--resolution", str(resolution),
-        "statsviewer.rrd",
+        rrd_path,
         "LAST"
     )
 
-    cpu_data = []
-    mem_data = []
+    if viewselect == "cpu_mem":
+        cpu_data = []
+        mem_data = []
 
-    for entry in result[2]:
-        cpu_data.append(entry[0])
-        mem_data.append(entry[1])
+        for entry in result[2]:
+            cpu_data.append(entry[0])
+            mem_data.append(entry[1])
 
+        cpu_graph = Graph(cpu_data, 1000, 250, 100, "Percent")
+        mem_graph = Graph(
+            mem_data, 1000, 250,
+            stats.mem_total/(1024**2), "megaBytes")
+        
+        graphs = [cpu_graph, mem_graph]
+    
+    elif viewselect == "temps":
+        cpu_data = []
+        sodimm_data = []
+        gpu_data = []
+        ambient_data = []
 
-    cpu_graph = Graph(cpu_data, 1000, 250, 100, "Percent")
-    mem_graph = Graph(
-        mem_data, 1000, 250,
-        stats.mem_total/(1024**2), "megaBytes")
-    return [cpu_graph, mem_graph]
+        for entry in result[2]:
+            cpu_data.append(entry[2])
+            sodimm_data.append(entry[3])
+            gpu_data.append(entry[4])
+            ambient_data.append(entry[5])
+        
+        cpu_graph = Graph(cpu_data, 1000, 250, 100, "Degrees")
+        sodimm_graph = Graph(sodimm_data, 1000, 250, 100, "Degrees")
+        gpu_graph = Graph(gpu_data, 1000, 250, 100, "Degrees")
+        ambient_graph = Graph(ambient_data, 1000, 250, 100, "Degrees")
+        
+        graphs = [cpu_graph, sodimm_graph, gpu_graph, ambient_graph]
+
+    return graphs
     
 
-def runFlask():
+def runFlask(path):
+    global rrd_path
+    rrd_path = path
     stats.update()
     app.run(host="0.0.0.0", port=5000)
 

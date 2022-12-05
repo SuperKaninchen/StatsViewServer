@@ -8,6 +8,7 @@ class Graph(object):
         self.height = height
         self.max = max
         self.unit = unit
+        self.segment_width = width / len(data)
 
 
 def generatePointList(entries, width, height):
