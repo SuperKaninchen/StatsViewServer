@@ -27,3 +27,7 @@ run `statsviewer record /path/to/database.rrd` to update the RRD every few secon
 ### Step Three
 
 run `statsviewer serve /path/to/database.rrd` to start the flask server for displaying the stats
+
+### Step Four
+
+Open the IP shown by Flask inside a web browser. You should see something similar to the image above.
