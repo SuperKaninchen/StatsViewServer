@@ -3,7 +3,7 @@ statsviewer
 Periodically store system statistics in a Round-Robin Database
 and display them using a Flask server
 
-![Uploading image.png…]()
+![image](https://user-images.githubusercontent.com/16620882/205768089-06ab387f-47f2-4736-aadf-3618545f1632.png)
 
 
 ## Installation
