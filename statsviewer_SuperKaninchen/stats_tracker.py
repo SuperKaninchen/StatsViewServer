@@ -49,7 +49,7 @@ class Stats(object):
         
         out = "N:%s:%s:%s:%s:%s:%s" % (
             self.cpu_percent,
-            self.mem_percent,
+            self.mem_used/1000000,
             rrd_temps["CPU"],
             rrd_temps["SODIMM"],
             rrd_temps["GPU"],

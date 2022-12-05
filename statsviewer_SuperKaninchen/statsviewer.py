@@ -54,11 +54,12 @@ def serve(path):
 
 
 def init(path):
+    stats = Stats()
     rrdtool.create(
         path,
         "--step", "1",
         "DS:cpu_usage:GAUGE:30:0:100",
-        "DS:mem_usage:GAUGE:30:0:100",
+        "DS:mem_usage:GAUGE:30:0:"+str(stats.mem_total/1000000),
         "DS:cpu_temp:GAUGE:30:0:200",
         "DS:sodimm_temp:GAUGE:30:0:200",
         "DS:gpu_temp:GAUGE:30:0:200",

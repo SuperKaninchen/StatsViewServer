@@ -3,7 +3,7 @@ class Graph(object):
 
     def __init__(self, title, data, width, height, max, unit) -> None:
         self.title = title
-        points = generatePointList(data, width, height)
+        points = generatePointList(data, width, height, max)
         self.lines = generateLineList(points)
         self.width = width
         self.height = height
@@ -16,12 +16,12 @@ class Graph(object):
                 break
 
 
-def generatePointList(entries, width, height):
+def generatePointList(entries, width, height, max):
     points = []
 
     for i in range(len(entries)):
         v = entries[i]
-        y = height - v * (height / 100) if v else None
+        y = height - v * (height / max) if v else None
 
         point = {
             "x": i * (width / len(entries)),
