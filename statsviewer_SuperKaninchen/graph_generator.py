@@ -10,6 +10,10 @@ class Graph(object):
         self.max = max
         self.unit = unit
         self.segment_width = width / len(data)
+        for i in range(len(data)-1, 0, -1):
+            if data[i]:
+                self.last_value = int(data[i])
+                break
 
 
 def generatePointList(entries, width, height):

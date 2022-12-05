@@ -16,10 +16,12 @@ class Stats(object):
         self.update()
     
     def _unpackTemps(self):
-        temps = psutil.sensors_temperatures()["dell_smm"]
-        for temp in temps:
-            if temp.label in ["CPU", "SODIMM", "GPU", "Ambient"]:
-                self.temps[temp.label] = temp.current
+        temps = psutil.sensors_temperatures()
+        for temp_source in temps:
+            if temp_source and temps[temp_source]:
+                self.temps[temp_source] = {}
+                for temp in temps[temp_source]:
+                    self.temps[temp_source][temp.label] = temp.current
 
 
     def update(self):
@@ -34,12 +36,23 @@ class Stats(object):
         self._unpackTemps()
     
     def getRRDString(self):
+        rrd_temps = {}
+        for temp_source in self.temps:
+            if "CPU" in self.temps[temp_source]:
+                rrd_temps["CPU"] = self.temps[temp_source]["CPU"]
+            if "SODIMM" in self.temps[temp_source]:
+                rrd_temps["SODIMM"] = self.temps[temp_source]["SODIMM"]
+            if "GPU" in self.temps[temp_source]:
+                rrd_temps["GPU"] = self.temps[temp_source]["GPU"]
+            if "Ambient" in self.temps[temp_source]:
+                rrd_temps["Ambient"] = self.temps[temp_source]["Ambient"]
+        
         out = "N:%s:%s:%s:%s:%s:%s" % (
             self.cpu_percent,
             self.mem_percent,
-            self.temps["CPU"],
-            self.temps["SODIMM"],
-            self.temps["GPU"],
-            self.temps["Ambient"]
+            rrd_temps["CPU"],
+            rrd_temps["SODIMM"],
+            rrd_temps["GPU"],
+            rrd_temps["Ambient"]
         )
         return out

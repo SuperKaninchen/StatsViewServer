@@ -10,16 +10,6 @@ viewselect = "cpu_mem"
 rrd_path = ""
 
 
-def makeStatsDict(stats):
-    cur_stats = {}
-    cur_stats["cpu_percent"] = stats.cpu_percent
-    cur_stats["mem_total"] = stats.mem_total / (1024 ** 2)
-    cur_stats["mem_used"] = stats.mem_used / (1024 ** 2)
-    cur_stats["mem_free"] = (stats.mem_total - stats.mem_used) / (1024 ** 2)
-    cur_stats["mem_unit"] = "mB"
-    return cur_stats
-
-
 @app.route("/viewStats", methods=["GET", "POST"])
 def viewStats():
     global timeframe, viewselect
@@ -28,18 +18,12 @@ def viewStats():
         viewselect = request.form.get("viewselect")
 
     graphs = fetchGraphsFromRRD(timeframe)
+    tables = fetchTablesFromTracker()
     stats.update()
-    stats_dict = makeStatsDict(stats)
     return render_template(
         "viewPageTemplate.jinja",
-        cpu_percent = stats_dict["cpu_percent"],
-        mem_total = stats_dict["mem_total"],
-        mem_used = stats_dict["mem_used"],
-        mem_free = stats_dict["mem_free"],
-        mem_unit = stats_dict["mem_unit"],
         graphs = graphs,
-        total_times = stats.total_times,
-        diff_times = stats.diff_times
+        tables = tables
     )
 
 
@@ -90,6 +74,32 @@ def fetchGraphsFromRRD(timeframe):
 
     return graphs
     
+
+def fetchTablesFromTracker():
+    tables = []
+
+    tables.append({
+        "title": "Total CPU times",
+        "entries": stats.total_times
+    })
+    tables.append({
+        "title": "CPU times since last update",
+        "entries": stats.diff_times
+    })
+
+    temps = stats.temps
+    for temp_source in temps:
+        print(temp_source)
+        print(temps[temp_source])
+        tables.append({
+            "title": "Temperature Sensor " + temp_source,
+            "entries": temps[temp_source]
+        })
+
+    return tables
+    
+
+
 
 def runFlask(path):
     global rrd_path

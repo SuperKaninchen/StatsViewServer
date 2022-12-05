@@ -12,6 +12,10 @@ body {
     border: 2px solid white;
 }
 
+#graphs {
+    margin-bottom: 32px;
+}
+
 .graph-title {
     display: block;
     min-width: 100px;
