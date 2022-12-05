@@ -61,10 +61,11 @@ def fetchGraphsFromRRD(timeframe):
             cpu_data.append(entry[0])
             mem_data.append(entry[1])
 
-        cpu_graph = Graph(cpu_data, 1000, 250, 100, "Percent")
+        cpu_graph = Graph("CPU usage", cpu_data, 1000, 250, 100, "Percent")
         mem_graph = Graph(
+            "RAM usage",
             mem_data, 1000, 250,
-            stats.mem_total/(1024**2), "megaBytes")
+            int(stats.mem_total/(1024**2)), "megaBytes")
         
         graphs = [cpu_graph, mem_graph]
     
@@ -80,10 +81,10 @@ def fetchGraphsFromRRD(timeframe):
             gpu_data.append(entry[4])
             ambient_data.append(entry[5])
         
-        cpu_graph = Graph(cpu_data, 1000, 250, 100, "Degrees")
-        sodimm_graph = Graph(sodimm_data, 1000, 250, 100, "Degrees")
-        gpu_graph = Graph(gpu_data, 1000, 250, 100, "Degrees")
-        ambient_graph = Graph(ambient_data, 1000, 250, 100, "Degrees")
+        cpu_graph = Graph("CPU temperature", cpu_data, 1000, 250, 100, "Degrees")
+        sodimm_graph = Graph("SODIMM temperature", sodimm_data, 1000, 250, 100, "Degrees")
+        gpu_graph = Graph("GPU temperature", gpu_data, 1000, 250, 100, "Degrees")
+        ambient_graph = Graph("Ambient temperature", ambient_data, 1000, 250, 100, "Degrees")
         
         graphs = [cpu_graph, sodimm_graph, gpu_graph, ambient_graph]
 

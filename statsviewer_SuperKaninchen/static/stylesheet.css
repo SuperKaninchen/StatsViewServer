@@ -12,6 +12,12 @@ body {
     border: 2px solid white;
 }
 
+.graph-title {
+    display: block;
+    min-width: 100px;
+    min-height: 20px;
+}
+
 #view-settings {
     margin: 16px;
 }

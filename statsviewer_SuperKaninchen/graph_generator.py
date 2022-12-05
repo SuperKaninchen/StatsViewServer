@@ -1,7 +1,8 @@
 
 class Graph(object):
 
-    def __init__(self, data, width, height, max, unit) -> None:
+    def __init__(self, title, data, width, height, max, unit) -> None:
+        self.title = title
         points = generatePointList(data, width, height)
         self.lines = generateLineList(points)
         self.width = width

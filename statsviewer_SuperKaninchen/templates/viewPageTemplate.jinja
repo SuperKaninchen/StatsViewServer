@@ -3,7 +3,7 @@
     <head>
         <title> View Machine Stats </title>
         <link rel="stylesheet" href="{{url_for('static',filename='stylesheet.css')}}" />
-        <meta http-equiv="refresh" content="3">
+        <meta http-equiv="refresh" content="60">
     </head>
     <body>
 
@@ -31,10 +31,14 @@
             <div id="graphs">
 
                 {% for graph in graphs %}
+                
+                <h2>{{ graph.title }}</h2>
 
                 <svg class="graph" width="{{ graph.width }}" height="{{ graph.height }}">
 
                 {% for line in graph.lines %}
+
+                    <text x="0" y="{{ graph.height/2 }}" fill="white"> {{ graph.max/2 }} {{ graph.unit }}</text>
 
                     {% if line.y2 %} 
 
