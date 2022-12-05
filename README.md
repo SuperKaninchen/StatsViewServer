@@ -9,7 +9,9 @@ and display them using a Flask server
 ## Installation
 
 ```
-pip install statsviewer
+git clone https://github.com/SuperKaninchen/StatsViewServer
+cd StatsViewServer-main
+pip install .
 ```
 
 ## Usage
