@@ -1,0 +1,2 @@
+include statsviewer_SuperKaninchen/templates/*
+include statsviewer_SuperKaninchen/static/*

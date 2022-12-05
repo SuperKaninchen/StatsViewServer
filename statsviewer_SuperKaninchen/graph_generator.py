@@ -1,21 +1,27 @@
 
 class Graph(object):
 
-    def __init__(self, data, width, height, max, unit) -> None:
-        points = generatePointList(data, width, height)
+    def __init__(self, title, data, width, height, max, unit) -> None:
+        self.title = title
+        points = generatePointList(data, width, height, max)
         self.lines = generateLineList(points)
         self.width = width
         self.height = height
         self.max = max
         self.unit = unit
+        self.segment_width = width / len(data)
+        for i in range(len(data)-1, 0, -1):
+            if data[i]:
+                self.last_value = int(data[i])
+                break
 
 
-def generatePointList(entries, width, height):
+def generatePointList(entries, width, height, max):
     points = []
 
     for i in range(len(entries)):
         v = entries[i]
-        y = height - v * (height / 100) if v else None
+        y = height - v * (height / max) if v else None
 
         point = {
             "x": i * (width / len(entries)),

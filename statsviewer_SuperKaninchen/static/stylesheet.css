@@ -1,6 +1,7 @@
 body {
     background-color: black;
     color: white;
+    font-family: 'Courier New', Courier, monospace;
 }
 
 #page-content {
@@ -9,4 +10,18 @@ body {
 
 .graph {
     border: 2px solid white;
+}
+
+#graphs {
+    margin-bottom: 32px;
+}
+
+.graph-title {
+    display: block;
+    min-width: 100px;
+    min-height: 20px;
+}
+
+#view-settings {
+    margin: 16px;
 }

@@ -11,5 +11,6 @@ setup(
         'console_scripts': [
             'statsviewer = statsviewer_SuperKaninchen.statsviewer:main'
         ]
-    }
+    },
+    include_package_data=True
 )

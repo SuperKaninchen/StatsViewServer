@@ -7,11 +7,22 @@ class Stats(object):
     mem_total = 0
     total_times = {}
     diff_times = {}
+    temps = {}
 
     def __init__(self) -> None:
         self.mem_total = psutil.virtual_memory().total
         self.total_times = psutil.cpu_times()._asdict()
+        
         self.update()
+    
+    def _unpackTemps(self):
+        temps = psutil.sensors_temperatures()
+        for temp_source in temps:
+            if temp_source and temps[temp_source]:
+                self.temps[temp_source] = {}
+                for temp in temps[temp_source]:
+                    self.temps[temp_source][temp.label] = temp.current
+
 
     def update(self):
         times = psutil.cpu_times()._asdict()
@@ -21,7 +32,27 @@ class Stats(object):
         self.cpu_percent = int(psutil.cpu_percent(interval=None))
         self.mem_used = psutil.virtual_memory().used
         self.mem_percent = int(self.mem_used / self.mem_total * 100)
+
+        self._unpackTemps()
     
     def getRRDString(self):
-        out = "N:" + str(self.cpu_percent) + ":" + str(self.mem_percent)
+        rrd_temps = {}
+        for temp_source in self.temps:
+            if "CPU" in self.temps[temp_source]:
+                rrd_temps["CPU"] = self.temps[temp_source]["CPU"]
+            if "SODIMM" in self.temps[temp_source]:
+                rrd_temps["SODIMM"] = self.temps[temp_source]["SODIMM"]
+            if "GPU" in self.temps[temp_source]:
+                rrd_temps["GPU"] = self.temps[temp_source]["GPU"]
+            if "Ambient" in self.temps[temp_source]:
+                rrd_temps["Ambient"] = self.temps[temp_source]["Ambient"]
+        
+        out = "N:%s:%s:%s:%s:%s:%s" % (
+            self.cpu_percent,
+            self.mem_used/1000000,
+            rrd_temps["CPU"],
+            rrd_temps["SODIMM"],
+            rrd_temps["GPU"],
+            rrd_temps["Ambient"]
+        )
         return out
