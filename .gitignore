@@ -1,3 +1,6 @@
+# Round-Robin Database file
+*.rrd
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
