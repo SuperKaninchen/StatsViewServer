@@ -22,6 +22,7 @@ def viewStats():
     stats.update()
     return render_template(
         "viewPageTemplate.jinja",
+        timeframe = timeframe,
         graphs = graphs,
         tables = tables
     )

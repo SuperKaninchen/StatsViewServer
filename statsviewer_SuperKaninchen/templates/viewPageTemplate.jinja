@@ -13,7 +13,7 @@
 
             <div id="view-settings">
                 <form action="{{ url_for('viewStats') }}" method="POST">
-                    <select name="timeframe">                
+                    <select name="timeframe" value="{{ timeframe }}">                
                         <option value="60">60 Seconds</option>
                         <option value="600">10 Minutes</option>
                         <option value="3600">1 Hour</option>
@@ -38,15 +38,67 @@
 
                 {% for line in graph.lines %}
 
-                    <text x="0" y="{{ graph.height/2 }}" fill="white"> {{ graph.max/2 }} {{ graph.unit }}</text>
+                    <text x="0" y="{{ graph.height/2 - 20 }}" fill="white"> {{ graph.max/2 }} {{ graph.unit }}</text>
 
                     <text
                     x="{{ graph.width - (graph.width/5) }}"
-                    y="{{ graph.height/2 }}"
+                    y="50"
                     style="fill:white;stroke:white;"                    
                     >    
                         {{ graph.last_value }} {{ graph.unit }}
                     </text>
+
+                    <line
+                        x1="0"
+                        y1="{{ graph.height/2 }}"
+                        x2="20"
+                        y2="{{ graph.height/2 }}"
+                        style="stroke:white;stroke-width:2;"
+                    />
+
+                    <text
+                        x="{{ graph.width/2 }}"
+                        y="{{ graph.height - 20}}"
+                        style="fill:white;stroke:white;"                    
+                    >    
+                        {{ timeframe/2 }} s
+                    </text>
+                    <text
+                        x="{{ graph.width/4 }}"
+                        y="{{ graph.height - 20}}"
+                        style="fill:white;stroke:white;"                    
+                    >    
+                        {{ timeframe/4 }} s
+                    </text>
+                    <text
+                        x="{{ graph.width*0.75 }}"
+                        y="{{ graph.height - 20}}"
+                        style="fill:white;stroke:white;"                    
+                    >    
+                        {{ (timeframe/4)*3 }} s
+                    </text>
+
+                    <line
+                        x1="{{ graph.width/2 }}"
+                        y1="{{ graph.height }}"
+                        x2="{{ graph.width/2 }}"
+                        y2="{{ graph.height - 20 }}"
+                        style="stroke:white;stroke-width:2;"
+                    />
+                    <line
+                        x1="{{ graph.width/4 }}"
+                        y1="{{ graph.height }}"
+                        x2="{{ graph.width/4 }}"
+                        y2="{{ graph.height - 20 }}"
+                        style="stroke:white;stroke-width:2;"
+                    />
+                    <line
+                        x1="{{ graph.width*0.75 }}"
+                        y1="{{ graph.height }}"
+                        x2="{{ graph.width*0.75 }}"
+                        y2="{{ graph.height - 20 }}"
+                        style="stroke:white;stroke-width:2;"
+                    />
 
                     {% if line.y2 %} 
 
