@@ -22,7 +22,7 @@ def makeStatsDict(stats):
 def viewStats():
     global timeframe
     if request.method == "POST":
-        timeframe = request.form.get("timeframe")
+        timeframe = int(request.form.get("timeframe"))
 
     graphs = fetchGraphsFromRRD(timeframe)
     stats.update()
@@ -41,8 +41,11 @@ def viewStats():
 
 
 def fetchGraphsFromRRD(timeframe):
+    resolution = int(timeframe/100)+1
+    print(resolution)
     result = rrdtool.fetch(
         "--start", "-"+str(timeframe),
+        "--resolution", str(resolution),
         "statsviewer.rrd",
         "LAST"
     )
