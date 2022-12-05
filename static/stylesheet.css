@@ -6,3 +6,7 @@ body {
 #page-content {
     margin: auto;
 }
+
+.graph {
+    border: 2px solid white;
+}

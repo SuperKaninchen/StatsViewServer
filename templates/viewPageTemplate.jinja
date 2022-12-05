@@ -3,6 +3,7 @@
     <head>
         <title> View Machine Stats </title>
         <link rel="stylesheet" href="{{url_for('static',filename='stylesheet.css')}}" />
+        <meta http-equiv="refresh" content="3">
     </head>
     <body>
 
@@ -10,21 +11,51 @@
 
             <h1> Machine Stats </h1>
 
-            <svg id="graph" width="{{ graph.width }}" height="{{ graph.height }}">
+            <form action="{{ url_for('viewStats') }}" method="POST">
+                <select name="timeframe">
+                
+                    <option value="60">60 Seconds</option>
+                    <option value="600">10 Minutes</option>
+                    <option value="3600">1 Hour</option>
+                    <option value="86400">1 Day</option>
+                
+                </select>
+                
+                <input type="submit" value="Update timeframe">
+            </form>
+
+            {% for graph in graphs %}
+
+            <svg class="graph" width="{{ graph.width }}" height="{{ graph.height }}">
 
             {% for line in graph.lines %}
 
-                <line
-                    x1="{{ line.x1 }}"
-                    y1="{{ line.y1 }}"
-                    x2="{{ line.x2 }}"
-                    y2="{{ line.y2 }}"
-                    style="stroke:rgb(255,0,0);stroke-width:2"
-                />
+                {% if line.y2 %} 
+
+                    <line
+                        x1="{{ line.x1 }}"
+                        y1="{{ line.y1 }}"
+                        x2="{{ line.x2 }}"
+                        y2="{{ line.y2 }}"
+                        style="stroke:green;stroke-width:2"
+                    />
+
+                {% else %}
+
+                    <rect
+                        x="{{ line.x1 }}"
+                        width="10"
+                        height="{{ graph.height }}"
+                        style="fill:red;stroke:black;stroke-width:2;"
+                    />
+
+                {% endif %}
 
             {% endfor %}
 
             </svg>
+
+            {% endfor %}
 
             <table>
                 <tr>
@@ -43,6 +74,35 @@
                     <td>Memory free ({{ mem_unit }})</td>
                     <td>{{ mem_free }}</td>
                 </tr>
+            </table>
+
+            <h2> CPU Times: </h3>
+            <h3> Total: </h3>
+            <table>
+
+            {% for name,time in total_times.items() %}
+
+                <tr>
+                    <td> {{ name }}</td>
+                    <td> {{ time }}</td>
+                </tr>
+            
+            {% endfor %}
+
+            </table>
+
+            <h3> Since last call: </h3>
+            <table>
+
+            {% for name,time in diff_times.items() %}
+
+                <tr>
+                    <td> {{ name }}</td>
+                    <td> {{ time }}</td>
+                </tr>
+            
+            {% endfor %}
+
             </table>
 
         </div>
