@@ -1,8 +1,8 @@
 import argparse
 import rrdtool
 import time
-import wsgi
-import stats_tracker
+from .wsgi import runFlask
+from .stats_tracker import Stats
 
 
 def initParser(parser):
@@ -27,7 +27,7 @@ def initParser(parser):
 
 
 def record():
-    stats = stats_tracker.Stats()
+    stats = Stats()
 
     recording = True
     while recording:
@@ -44,7 +44,7 @@ def record():
 
 
 def serve():
-    wsgi.main()      
+    runFlask()      
 
 
 def init():

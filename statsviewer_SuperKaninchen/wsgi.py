@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request
-from stats_tracker import Stats
-import graph_generator
+from .stats_tracker import Stats
+from .graph_generator import Graph
 import rrdtool
 
 stats = Stats()
@@ -58,17 +58,17 @@ def fetchGraphsFromRRD(timeframe):
         mem_data.append(entry[1])
 
 
-    cpu_graph = graph_generator.Graph(cpu_data, 1000, 250, 100, "Percent")
-    mem_graph = graph_generator.Graph(
+    cpu_graph = Graph(cpu_data, 1000, 250, 100, "Percent")
+    mem_graph = Graph(
         mem_data, 1000, 250,
         stats.mem_total/(1024**2), "megaBytes")
     return [cpu_graph, mem_graph]
     
 
-def main():
+def runFlask():
     stats.update()
     app.run(host="0.0.0.0", port=5000)
 
 
 if __name__ == "__main__":
-    main()
+    runFlask()

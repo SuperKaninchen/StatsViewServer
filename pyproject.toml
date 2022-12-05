@@ -1,0 +1,18 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "statsviewer_SuperKaninchen"
+version = "0.0.1"
+authors = [
+  { name="SuperKaninchen", email="SuperKaninchen@users.noreply.github.com" },
+]
+description = "Stores system stats in RRD and displays them using flask"
+readme = "README.md"
+requires-python = ">=3.7"
+dependencies = ["flask", "rrdtool", "psutil", "argparse"]
+
+
+[project.urls]
+"Homepage" = "https://github.com/SuperKaninchen/statsviewer"
