@@ -80,10 +80,12 @@ def fetchTablesFromTracker():
 
     tables.append({
         "title": "Total CPU times",
+        "unit": "seconds",
         "entries": stats.total_times
     })
     tables.append({
         "title": "CPU times since last update",
+        "unit": "seconds",
         "entries": stats.diff_times
     })
 
@@ -93,6 +95,7 @@ def fetchTablesFromTracker():
         print(temps[temp_source])
         tables.append({
             "title": "Temperature Sensor " + temp_source,
+            "unit": "degrees Celsius",
             "entries": temps[temp_source]
         })
 
