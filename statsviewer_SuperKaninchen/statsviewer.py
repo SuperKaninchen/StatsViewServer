@@ -64,6 +64,10 @@ def init(path):
         "DS:sodimm_temp:GAUGE:30:0:200",
         "DS:gpu_temp:GAUGE:30:0:200",
         "DS:ambient_temp:GAUGE:30:0:200",
+        "RRA:AVERAGE:0.5:1s:1m",  # for displaying every second of one minute
+        "RRA:AVERAGE:0.5:6s:10m",  # for displaying 100 6-second segments of 10 minutes
+        "RRA:AVERAGE:0.5:36s:1h",  # for displaying 100 36-second segments of 1 hour
+        "RRA:AVERAGE:0.5:864s:1d",  # for displaying 100 864-second segments of 1 day
         "RRA:AVERAGE:0.5:1:864000",
         "RRA:AVERAGE:0.5:60:129600",
         "RRA:AVERAGE:0.5:3600:13392",

@@ -2,20 +2,32 @@ from flask import Flask, render_template, request
 from .stats_tracker import Stats
 from .graph_generator import Graph
 import rrdtool
+import time
 
 stats = Stats()
 app = Flask(__name__)
+
 timeframe = 60
 viewselect = "cpu_mem"
+resolution = 100
+
 rrd_path = ""
 
 
 @app.route("/viewStats", methods=["GET", "POST"])
 def viewStats():
-    global timeframe, viewselect
+    global timeframe, viewselect, resolution
     if request.method == "POST":
         timeframe = int(request.form.get("timeframe"))
         viewselect = request.form.get("viewselect")
+        resolution = int(request.form.get("resolution"))
+    
+    if not timeframe:
+        timeframe = 60
+    if not viewselect:
+        viewselect = "cpu_mem"
+    if not resolution:
+        resolution = 100
 
     graphs = fetchGraphsFromRRD(timeframe)
     tables = fetchTablesFromTracker()
@@ -23,18 +35,16 @@ def viewStats():
     return render_template(
         "viewPageTemplate.jinja",
         timeframe = timeframe,
-        viewselect=viewselect,
+        viewselect = viewselect,
+        resolution = resolution,
         graphs = graphs,
         tables = tables
     )
 
 
 def fetchGraphsFromRRD(timeframe):
-    resolution = int(timeframe/100)+1
-    print(resolution)
     result = rrdtool.fetch(
         "--start", "-"+str(timeframe),
-        "--resolution", str(resolution),
         rrd_path,
         "LAST"
     )
@@ -47,11 +57,11 @@ def fetchGraphsFromRRD(timeframe):
             cpu_data.append(entry[0])
             mem_data.append(entry[1])
 
-        cpu_graph = Graph("CPU usage", cpu_data, 1000, 250, 100, "Percent")
+        cpu_graph = Graph("CPU usage", cpu_data, 1000, 250, 100, "Percent", resolution)
         mem_graph = Graph(
             "RAM usage",
             mem_data, 1000, 250,
-            int(stats.mem_total/(1024**2)), "megaBytes")
+            int(stats.mem_total/(1024**2)), "megaBytes", resolution)
         
         graphs = [cpu_graph, mem_graph]
     
@@ -67,10 +77,10 @@ def fetchGraphsFromRRD(timeframe):
             gpu_data.append(entry[4])
             ambient_data.append(entry[5])
         
-        cpu_graph = Graph("CPU temperature", cpu_data, 1000, 250, 100, "Degrees")
-        sodimm_graph = Graph("SODIMM temperature", sodimm_data, 1000, 250, 100, "Degrees")
-        gpu_graph = Graph("GPU temperature", gpu_data, 1000, 250, 100, "Degrees")
-        ambient_graph = Graph("Ambient temperature", ambient_data, 1000, 250, 100, "Degrees")
+        cpu_graph = Graph("CPU temperature", cpu_data, 1000, 250, 100, "Degrees", resolution)
+        sodimm_graph = Graph("SODIMM temperature", sodimm_data, 1000, 250, 100, "Degrees", resolution)
+        gpu_graph = Graph("GPU temperature", gpu_data, 1000, 250, 100, "Degrees", resolution)
+        ambient_graph = Graph("Ambient temperature", ambient_data, 1000, 250, 100, "Degrees", resolution)
         
         graphs = [cpu_graph, sodimm_graph, gpu_graph, ambient_graph]
 
@@ -93,8 +103,6 @@ def fetchTablesFromTracker():
 
     temps = stats.temps
     for temp_source in temps:
-        print(temp_source)
-        print(temps[temp_source])
         tables.append({
             "title": "Temperature Sensor " + temp_source,
             "unit": "degrees Celsius",

@@ -34,6 +34,11 @@ body {
     color: white;
     padding: 8px;
 }
+#view-settings input[type="number"] {
+    display: block;
+    background-color: black;
+    color: white;
+}
 
 .view-select {
     display: block;

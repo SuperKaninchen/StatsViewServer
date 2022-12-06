@@ -13,16 +13,31 @@
 
             <div id="view-settings">
                 <form action="{{ url_for('viewStats') }}" method="POST">
-                    <select class="view-select" name="timeframe" value="{{ timeframe }}">                
+
+                    <label for="timeframe-select">Timeframe viewed in Graphs:</label>
+                    <select id="timeframe-select" class="view-select" name="timeframe" value="{{ timeframe }}">                
                         <option value="60">60 Seconds</option>
                         <option value="600">10 Minutes</option>
                         <option value="3600">1 Hour</option>
                         <option value="86400">1 Day</option>                
                     </select>
-                    <select class="view-select" name="viewselect" value="{{ viewselect }}">
-                        <option value="cpu_mem">CPU and Memory</option>
+
+                    <label for="view-select">What data to view in Graphs:</label>
+                    <select id="view-select" class="view-select" name="viewselect" value="{{ viewselect }}">
+                        <option value="cpu_mem">CPU and Memory usage</option>
                         <option value="temps">Temperatures</option>               
                     </select>
+
+                    <label for="res-input">Graph resolution: (number of lines per graph)</label>
+                    <input
+                        type="number"
+                        min="100"
+                        max="2000"
+                        step="100"
+                        value="{{ resolution }}"
+                        id="res-input"
+                        name="resolution">
+
                     <input type="submit" value="Update view">
                 </form>           
             </div>
