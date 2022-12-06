@@ -13,17 +13,16 @@
 
             <div id="view-settings">
                 <form action="{{ url_for('viewStats') }}" method="POST">
-                    <select name="timeframe" value="{{ timeframe }}">                
+                    <select class="view-select" name="timeframe" value="{{ timeframe }}">                
                         <option value="60">60 Seconds</option>
                         <option value="600">10 Minutes</option>
                         <option value="3600">1 Hour</option>
                         <option value="86400">1 Day</option>                
                     </select>
-                    <select name="viewselect">
+                    <select class="view-select" name="viewselect" value="{{ viewselect }}">
                         <option value="cpu_mem">CPU and Memory</option>
                         <option value="temps">Temperatures</option>               
                     </select>
-                    
                     <input type="submit" value="Update view">
                 </form>           
             </div>

@@ -23,6 +23,7 @@ def viewStats():
     return render_template(
         "viewPageTemplate.jinja",
         timeframe = timeframe,
+        viewselect=viewselect,
         graphs = graphs,
         tables = tables
     )
