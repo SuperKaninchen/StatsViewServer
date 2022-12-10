@@ -9,11 +9,16 @@ and display them using a Flask server
 
 Install the dependencies:
 ```
-rrdtool-devel
+rrdtool-devel\
+python3-devel
 ```
 using whatever package manager fits your setup.
 
-Fedora Example: `dnf install rrdtool-devel`
+Fedora Example:
+```
+dnf install rrdtool-devel\
+python3-devel`
+```
 
 Install the Python requirements using `pip install -r requirements.txt`
 
