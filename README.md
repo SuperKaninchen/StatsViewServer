@@ -7,6 +7,18 @@ and display them using a Flask server
 
 ## Installation
 
+Install the dependencies:
+```
+rrdtool-devel
+```
+using whatever package manager fits your setup.
+
+Fedora Example: `dnf install rrdtool-devel`
+
+Install the Python requirements using `pip install -r requirements.txt`
+
+After that, clone the repository and install it from inside using pip
+
 ```
 git clone https://github.com/SuperKaninchen/StatsViewServer
 cd StatsViewServer-main
