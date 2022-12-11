@@ -41,10 +41,17 @@ def record(path):
         rrd_string = stats.getRRDString()
         print(rrd_string)
 
-        rrdtool.update(
-            path,
-            rrd_string
-        )
+        for i in range(5):  # try to update rrd 5 times
+            try:
+                rrdtool.update(
+                    path,
+                    rrd_string
+                )
+                print("rrd updated")
+                break
+            except:
+                print("couldnt update rrd")
+                continue
         time.sleep(1)
 
 
