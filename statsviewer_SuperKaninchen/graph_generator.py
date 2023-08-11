@@ -21,7 +21,7 @@ def averageDataToLength(data, length):
     step = int(len(data)/length)
     if step < 2:
         return data
-    
+
     averaged_data = []
     for i in range(length):
         sum = 0
@@ -31,11 +31,11 @@ def averageDataToLength(data, length):
                 average = None
                 break
             sum += data[i*step+j]
-        
+
         if average:
             average = sum/step
         averaged_data.append(average)
-        
+
     return averaged_data
 
 
@@ -52,7 +52,7 @@ def generatePointList(entries, width, height, max):
         }
 
         points.append(point)
-    
+
     return points
 
 
@@ -69,7 +69,7 @@ def generateLineList(points):
             "x2": p2["x"],
             "y2": p2["y"]
         }
-        
+
         lines.append(line)
-    
+
     return lines

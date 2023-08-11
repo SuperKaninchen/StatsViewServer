@@ -45,7 +45,6 @@ class Stats(object):
         for temp_source in self.temps:
             if temp_source in ["acpitz", "nvme", "coretemp"]:
                 if temp_source == "coretemp":
-                    print(self.temps[temp_source])
                     if "Package id 0" in self.temps[temp_source]:
                         rrd_temps["CPU"] = self.temps[temp_source]["Package id 0"]
 

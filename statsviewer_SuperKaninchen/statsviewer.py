@@ -39,7 +39,6 @@ def record(path):
     while recording:
         stats.update()
         rrd_string = stats.getRRDString()
-        print(rrd_string)
 
         rrdtool.update(
             path,
@@ -50,7 +49,7 @@ def record(path):
 
 
 def serve(path):
-    runFlask(path)      
+    runFlask(path)
 
 
 def init(path):
@@ -85,7 +84,7 @@ def main():
 
     if args.command == "record":
         record(args.path)
-    
+
     elif args.command == "serve":
         serve(args.path)
 

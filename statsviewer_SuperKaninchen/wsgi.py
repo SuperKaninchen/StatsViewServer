@@ -24,10 +24,7 @@ def viewStats():
         return redirect("viewStats")
     else:
         if not timeframe:
-            print("no timeframe!!")
             timeframe = 60
-        else:
-            print(f"Timeframe {timeframe}")
         if not viewselect:
             viewselect = "cpu_mem"
         if not resolution:
