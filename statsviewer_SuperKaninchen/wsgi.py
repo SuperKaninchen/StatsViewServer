@@ -14,6 +14,10 @@ resolution = 100
 rrd_path = ""
 
 
+@app.route("/")
+def viewIndex():
+    return redirect("viewStats")
+
 @app.route("/viewStats", methods=["GET", "POST"])
 def viewStats():
     global timeframe, viewselect, resolution
